@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+        ServerAdmin tony.arianto@klola.id
+        #ServerName app.klola.id
+        #ServerAlias www.example.com
+        DocumentRoot /home/apps/public_html
+        #DirectoryIndex index.php
+        #Redirect permanent / https://app.klola.id/
+
+        <Directory /home/apps/public_html/>
+        DirectoryIndex index.php
+        DirectoryIndex index.html
+        Options -Indexes FollowSymLinks MultiViews
+                AllowOverride none
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        LogLevel warn
+        ErrorLog /home/apps/logs/app.klola.id-error.log
+        CustomLog /home/apps/logs/app.klola.id-access.log combined
+
+</VirtualHost>

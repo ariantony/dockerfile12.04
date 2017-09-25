@@ -1,0 +1,25 @@
+FROM ubuntu:12.04
+MAINTAINER Docker <tony.arianto@klola.id>
+
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN useradd -m apps && echo "apps:s1q2w3e4r5t" | chpasswd
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN adduser apps sudo
+RUN apt-get -y install sudo apache2 nano proftpd curl imagemagick apache2 libapache2-mod-php5 php5-mysql php5-mcrypt php5-curl php5-imagick php5-ldap
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y --force-yes --fix-missing install \
+    python-pip && \
+    apt-get clean
+RUN mkdir -p /home/apps/logs /home/apps/public_html /home/apps/shares
+21f202a61c56
+RUN sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/conf.d/supervisord.conf
+RUN pip install supervisor==3.2.3
+COPY supervisord.conf /usr/local/etc/supervisord.conf
+RUN echo "Asia/Jakarta" > /etc/timezone
+RUN dpkg-reconfigure --frontend noninteractive tzdata
+EXPOSE 21 20 80
+CMD ["supervisord"]

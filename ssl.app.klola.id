@@ -1,0 +1,42 @@
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+	ServerAdmin tony.arianto@klola.id
+    ServerName app.klola.id
+	DocumentRoot /home/apps/public_html
+
+    # DirectoryIndex index.php index.html
+	DirectoryIndex index.php index.php3 index.phtml index.php5 index.shtml mwindex.phtml index.html index.htm default.htm
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /home/apps/public_html/>
+		Options -Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+	
+	ErrorLog /home/apps/logs/apps.klola.id_ssl_error.log
+	LogLevel warn
+	CustomLog /home/apps/logs/apps.klola.id_ssl_access.log combined
+
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl2017/ServerCertificate.cer
+    SSLCertificateKeyFile /etc/apache2/ssl2017/klolaid.key
+    SSLCACertificatePath /etc/apache2/ssl2017/
+    #Gunakan CSR dan key yang sudah ada, untuk menciptakan certificatenya.
+
+
+	<FilesMatch "\.(cgi|shtml|phtml|php)$">
+		SSLOptions +StdEnvVars
+	</FilesMatch>
+	<Directory /usr/lib/cgi-bin>
+		SSLOptions +StdEnvVars
+	</Directory>
+	BrowserMatch "MSIE [2-6]" \
+		nokeepalive ssl-unclean-shutdown \
+		downgrade-1.0 force-response-1.0
+	BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+</VirtualHost>
+</IfModule>
