@@ -6,14 +6,14 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN useradd -m apps && echo "apps:s1q2w3e4r5t" | chpasswd
 RUN adduser apps sudo
-RUN apt-get -y update && apt-get -y upgrade && apt-get -y install sudo apache2 nano proftpd curl imagemagick apache2 libapache2-mod-php5 php5-mysql php5-mcrypt php5-curl php5-imagick php5-ldap
+RUN apt-get -y update && apt-get -y upgrade && apt-get -y install sudo apache2 nano proftpd curl imagemagick apache2 libapache2-mod-php5 php5-mysql php5-mcrypt php5-curl php5-imagick php5-ldap supervisor
 RUN apt-get -y --force-yes --fix-missing install \
     python-pip && \
     apt-get clean
 
 RUN mkdir -p /home/apps/logs /home/apps/public_html /home/apps/shares
 RUN sed -i "s|# DefaultRoot|DefaultRoot |g" /etc/proftpd/proftpd.conf
-RUN pip install supervisor==3.2.3
+#RUN pip install supervisor==3.2.3
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 
 ADD si_lib.so /usr/lib/php5/20090626
